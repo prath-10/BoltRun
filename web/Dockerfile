@@ -72,7 +72,7 @@ RUN go install -v github.com/tomnomnom/gf@latest
 RUN go install -v github.com/tomnomnom/unfurl@latest
 RUN go install -v github.com/tomnomnom/waybackurls@latest
 RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
-RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@fa16e09880d437bbccfe624a6b26ae3e593aecda
 RUN go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 RUN go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 RUN go install -v github.com/hakluke/hakrawler@latest
