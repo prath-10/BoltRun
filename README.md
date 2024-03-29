@@ -237,6 +237,6 @@ screenshot: {
 
     If `install.sh` does not have install permission, please change it, `chmod +x install.sh`
 
-**BoltRun can now be accessed from <https://127.0.0.1> or if you're on the VPS <https://your_vps_ip_address>**
+**BoltRun can now be accessed from <https://127.0.0.1>
 
 **Unless you are on development branch, please do not access BoltRun via any ports**
