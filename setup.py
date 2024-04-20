@@ -31,7 +31,7 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'raccoon=raccoon_src.main:main',
+            'boltrun=raccoon_src.main:main',
             'generate-html=raccoon_src.generate_html:generate'  # Add entry point for generating HTML
         ]
     },
