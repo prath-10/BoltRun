@@ -1,123 +1,164 @@
+#  Raccoon
+![Racoon](https://image.ibb.co/dkAq4J/raccoon.png)
+
+#### Offensive Security Tool for Reconnaissance and Information Gathering
+![Build Status](https://travis-ci.org/evyatarmeged/Raccoon.svg?branch=master)
+![license](https://img.shields.io/github/license/mashape/apistatus.svg)
+![os](https://img.shields.io/badge/OS-Linux,%20macOS-yellow.svg)
+![pythonver](https://img.shields.io/badge/python-3.5%2B-blue.svg)
+![raccoonver](https://img.shields.io/badge/version-0.8.5-lightgrey.svg)
+
+##### Features
+- [x] DNS details
+- [x] DNS visual mapping using DNS dumpster
+- [x] WHOIS information
+- [x] TLS Data - supported ciphers, TLS versions,
+certificate details and SANs
+- [x] Port Scan
+- [x] Services and scripts scan
+- [x] URL fuzzing and dir/file detection
+- [x] Subdomain enumeration - uses Google dorking, DNS dumpster queries,
+ SAN discovery and bruteforce
+- [x] Web application data retrieval:<br>
+  - CMS detection
+  - Web server info and X-Powered-By
+  - robots.txt and sitemap extraction
+  - Cookie inspection
+  - Extracts all fuzzable URLs
+  - Discovers HTML forms
+  - Retrieves all Email addresses
+  - Scans target for vulnerable S3 buckets and enumerates them
+  for sensitive files
+- [x] Detects known WAFs
+- [x] Supports anonymous routing through Tor/Proxies
+- [x] Uses asyncio for improved performance
+- [x] Saves output to files - separates targets by folders
+and modules by files
+
+
+##### Roadmap and TODOs
+- [ ] Expand, test, and merge the "owasp" branch with more web application attacks and scans ([#28](https://github.com/evyatarmeged/Raccoon/issues/28))
+- [ ] Support more providers for vulnerable storage scan ([#27](https://github.com/evyatarmeged/Raccoon/issues/27))
+- [ ] Add more WAFs, better detection
+- [ ] Support multiple hosts (read from file)
+- [ ] Rate limit evasion
+- [ ] IP ranges support
+- [ ] CIDR notation support
+- [ ] More output formats (JSON at the very least)
+
+
+### About
+Raccoon is a tool made for reconnaissance and information gathering with an emphasis on simplicity.<br> It will do everything from
+fetching DNS records, retrieving WHOIS information, obtaining TLS data, detecting WAF presence and up to threaded dir busting and
+subdomain enumeration. Every scan outputs to a corresponding file.<br>
+
+As most of Raccoon's scans are independent and do not rely on each other's results,
+it utilizes Python's asyncio to run most scans asynchronously.<br>
+
+Raccoon supports Tor/proxy for anonymous routing. It uses default wordlists (for URL fuzzing and subdomain discovery)
+from the amazing [SecLists](https://github.com/danielmiessler/SecLists) repository but different lists can be passed as arguments.<br>
+
+For more options - see "Usage".
+
+### Installation
+For the latest stable version:<br>
+```
+pip install raccoon-scanner
+# To run:
+raccoon [OPTIONS]
+```
+Please note Raccoon requires Python3.5+ so may need to use `pip3 install raccoon-scanner`.<br>
+You can also clone the GitHub repository for the latest features and changes:<br>
+```
+git clone https://github.com/evyatarmeged/Raccoon.git
+cd Raccoon
+python setup.py install # Subsequent changes to the source code will not be reflected in calls to raccoon when this is used
+# Or
+python setup.py develop # Changes to code will be reflected in calls to raccoon. This can be undone by using python setup.py develop --uninstall
+# Finally
+raccoon [OPTIONS] [TARGET]
+```
+#### macOS
+To support Raccoon on macOS you need to have gtimeout on your machine.<br>
+gtimeout can be installed by running `brew install coreutils`.
+#### Docker<br>
+```
+# Build the docker image
+docker build -t evyatarmeged/raccoon .
+# Run a scan, As this a non-root container we need to save the output under the user's home which is /home/raccoon
+docker run --name raccoon evyatarmeged/raccoon:latest  example.com -o /home/raccoon
 ```
 
-██████╗  ██████╗ ██╗  ████████╗██████╗ ██╗   ██╗███╗   ██╗
-██╔══██╗██╔═══██╗██║  ╚══██╔══╝██╔══██╗██║   ██║████╗  ██║
-██████╔╝██║   ██║██║     ██║   ██████╔╝██║   ██║██╔██╗ ██║
-██╔══██╗██║   ██║██║     ██║   ██╔══██╗██║   ██║██║╚██╗██║
-██████╔╝╚██████╔╝███████╗██║   ██║  ██║╚██████╔╝██║ ╚████║
-╚═════╝  ╚═════╝ ╚══════╝╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-                                                                                              
-                                                     
-```
-# Organized Attack Surface Mapper
+##### Prerequisites
+Raccoon uses [Nmap](https://github.com/nmap/nmap) to scan ports as well as utilizes some other Nmap scripts
+and features. It is mandatory that you have it installed before running Raccoon.<br>
+[OpenSSL](https://github.com/openssl/openssl) is also used for TLS/SSL scans and should be installed as well.
 
-
-
-A tool for mapping the attack surface of any type of target, it can find **subdomains, IPs and ports, services** and then scan them with other tools like **nuclei**, ports scanner, service detector with wappalyzer, etc....
-
-It has been designed to be **modular** and **easy to use**.
-You can easily add your own **API** to find subdomains, and your own **tools** to run after the initial scan or **even during the Attack Surface discovery**.
-
-It can also **pivot** to other related FQDNs and IPs. Last but not least, it features a **web export** with all the information found, and a ***modularity that makes it easy to add data from your tools***!
-
-All is organized by a **configuration.yaml** file, here you can set all the settings of the initial scan and others tools.
-
-<p align="center"> <img src="readme/Banner.png"></p>
-
-
-## Features 👀
-* Discover Attack Surface
-* Modularity on AS (Attack Surface) tools so you can add your own !
-* Find subdomains related to domains
-* Easy modularity on API to find new subs
-* Easy configuration file
-* Automatic update (and easy to add your own files to be updated)
-* Find FQDN from an IP and find all associated subs
-* Retreive all certificates of the IP and FQDNs founds and detect SAN
-* Can pivot to others related FQDNs
-* Can limit to a scope (regex(s), list, file)
-* Pass traffic through proxies automatically fetched from public lists (you can add your own)
-* Can launch others tools after initial scan completed
-* Can resume a scan to the last tool used
-* Modular web export for easy adding
-
-## Installation 💾
-**Need python3** 
-```bash
-git clone https://github.com/ugomeguerditchian/OrgASM
-cd OrgASM
-pip install -r requirements.txt
-python main.py -h
+### Usage
 ```
 
-## Implemented API for subs 🔭
-* Alienvault
-* Crt.sh
-* Hackertarget
-* Rapiddns
-* AnubisDB
-* Certspotter
+Usage: raccoon [OPTIONS] TARGET
 
-## Implemented tools 🔧
-* Bruteforce subdomains via wordlist and multiple resolvers
-* Ports scanner
-* Service detector
-* Wappalayzer for detected web ports and FQDNs
-* Nuclei scan
-
-## Incoming tools 🔬
-* Gobuster
-* WafWoof
-
-## Common usage 📖 
+Options:
+  --version                      Show the version and exit.
+  -d, --dns-records TEXT         Comma separated DNS records to query.
+                                 Defaults to: A,MX,NS,CNAME,SOA,TXT
+  --tor-routing                  Route HTTP traffic through Tor (uses port
+                                 9050). Slows total runtime significantly
+  --proxy-list TEXT              Path to proxy list file that would be used
+                                 for routing HTTP traffic. A proxy from the
+                                 list will be chosen at random for each
+                                 request. Slows total runtime
+  -c, --cookies TEXT             Comma separated cookies to add to the
+                                 requests. Should be in the form of key:value
+                                 Example: PHPSESSID:12345,isMobile:false
+  --proxy TEXT                   Proxy address to route HTTP traffic through.
+                                 Slows total runtime
+  -w, --wordlist TEXT            Path to wordlist that would be used for URL
+                                 fuzzing
+  -T, --threads INTEGER          Number of threads to use for URL
+                                 Fuzzing/Subdomain enumeration. Default: 25
+  --ignored-response-codes TEXT  Comma separated list of HTTP status code to
+                                 ignore for fuzzing. Defaults to:
+                                 302,400,401,402,403,404,503,504
+  --subdomain-list TEXT          Path to subdomain list file that would be
+                                 used for enumeration
+  -sc, --scripts                 Run Nmap scan with -sC flag
+  -sv, --services                Run Nmap scan with -sV flag
+  -f, --full-scan                Run Nmap scan with both -sV and -sC
+  -p, --port TEXT                Use this port range for Nmap scan instead of
+                                 the default
+  --vulners-nmap-scan            Perform an NmapVulners scan. Runs instead of
+                                 the regular Nmap scan and is longer.
+  --vulners-path TEXT            Path to the custom nmap_vulners.nse script.If
+                                 not used, Raccoon uses the built-in script it
+                                 ships with.
+  -fr, --follow-redirects        Follow redirects when fuzzing. Default: False
+                                 (will not follow redirects)
+  --tls-port INTEGER             Use this port for TLS queries. Default: 443
+  --skip-health-check            Do not test for target host availability
+  --no-url-fuzzing               Do not fuzz URLs
+  --no-sub-enum                  Do not bruteforce subdomains
+  --skip-nmap-scan               Do not perform an Nmap scan
+  -q, --quiet                    Do not output to stdout
+  -o, --outdir TEXT              Directory destination for scan output
+  --help                         Show this message and exit.
 ```
-usage: main.py [-h] [-d DOMAIN] [-ip IP] [-net NETWORK] [-R RECURSIVE] [--resume RESUME]
 
-options:
-  -h, --help            show this help message and exit
-  -d DOMAIN, --domain DOMAIN
-                        Domain to scan
-  -ip IP, --ip IP       IP to scan
-  -net NETWORK, --network NETWORK
-                        Network to scan, don't forget the CIDR (ex: 192.168.1.0/24)
-  -R RECURSIVE, --recursive RECURSIVE
-                        Recursive scan, will rescan all the subdomains finds and go deeper as you want, default is 0
-  --resume RESUME       Resume a scan from the json export. You can specify a tool (the last one to have finished), split with a ':' (ex: --resume exports/mydomain/date.json:nuclei) You can also use --resume exports/mydomain/date.json:export to just generate the html report
-```
+### Screenshots
+![poc2](https://image.ibb.co/iyLreJ/aaaaaaaaaaaaa.png)<br>
 
-## Roadmap 🏎️
-* More api
-* Possibility to add your own jinja template for an html object inside the mapper of the tool
+**Web application data including vulnerable S3 bucket:**<br>
+![somepoc](https://image.ibb.co/m6b3Jz/s3.png)
 
-### Refer to Wiki for this :
-* [Add new API for subs finding](https://github.com/ugomeguerditchian/OrgASM/wiki/Add-new-API-for-subs#getting-started)
-* [Add new tools](https://github.com/ugomeguerditchian/OrgASM/wiki/Add-new-tool-to-run-after-initial-scan#getting-started)
-* [Add new tools data to html report](https://github.com/ugomeguerditchian/OrgASM/wiki/Add-new-data-tool-to-the-html-export#getting-started)
+**[HTB](https://www.hackthebox.eu/) challenge example scan:**<br>
+![poc](https://image.ibb.co/bGKTRy/bbbbbbb.png)<br>
 
+**Nmap vulners scan results:**<br>
+![vulnerspoc](https://image.ibb.co/iaOMyU/nmap_vulners_poc.png)<br>
 
-## Contributing ❤️
-We would love for you to contribute to OrgASM and help make it even better than it is today! 
+**Results folder tree after a scan:**<br>
+![poc3](https://image.ibb.co/iyaCJd/poc3.png)
 
-You can easily add new API for subs, new tools to add with their data parser for the html report.
-
-Here are the guidelines we'd like you to follow:
-
-### **Issues**
-If you find a bug in the project or want to propose a new feature, please submit an issue on our [GitHub Issues page](https://github.com/ugomeguerditchian/OrgASM/issues).
-
-### **Pull Requests**
-If you'd like to contribute code to this project you can do so through GitHub by forking the repository and sending a pull request. Here's how:
-
-1. Fork the project via GitHub interface
-2. Clone your fork to your machine.
-3. Create a new branch with a meaningful name.
-4. Make your changes and commit them to your branch.
-5. Push your branch to your fork on GitHub.
-6. Create a new pull request via GitHub interface, pointing to your fork and branch.
-7. Fill in the required information and submit the pull request.
-
-### **Coding Standards**
-Please follow the coding conventions already established in the project. Consistency is key!
-
-### **Code of Conduct**
-In the interest of fostering an open and welcoming environment, we ask that our contributors adhere to a code of conduct which promotes respect and inclusivity. Harassment of any kind will not be tolerated.
+### Contributing
+Any and all contributions, issues, features and tips are welcome.
