@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 
+
 with open("README.md", "r") as file:
     long_description = file.read()
 
@@ -11,9 +12,9 @@ setup(
     description='Offensive Security Tool for Reconnaissance and Information Gathering',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author='Evyatar Meged',
-    author_email='evyatarmeged@gmail.com',
-    url='https://github.com/evyatarmeged/Raccoon',
+    author='Team BOlt',
+    author_email='boltyen@gmail.com',
+    url='https://github.com/prath-10/BoltRun',
     install_requires=['beautifulsoup4',
                       'requests',
                       'dnspython',
@@ -21,8 +22,7 @@ setup(
                       "click",
                       "fake-useragent",
                       "requests[socks]",
-                      "xmltodict",
-                      "Jinja2"],  # Add Jinja2 for HTML templating
+                      "xmltodict"],
     package_data={
         "raccoon_src": [
             "wordlists/*"
@@ -31,8 +31,7 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'boltrun=raccoon_src.main:main',
-            'generate-html=raccoon_src.generate_html:generate'  # Add entry point for generating HTML
+            'boltrun=raccoon_src.main:main'
         ]
     },
 )

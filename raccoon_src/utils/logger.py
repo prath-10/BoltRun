@@ -55,7 +55,7 @@ class Logger:
         self.logger = self.get_logger()
 
     def get_logger(self):
-        logger = logging.getLogger(self.__class__.__name__)
+        logger = logging.getLogger(self.__str__())
         logger.setLevel("DEBUG")
 
         out_handler = logging.FileHandler(self.outfile)

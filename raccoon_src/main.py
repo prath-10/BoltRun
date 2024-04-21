@@ -17,7 +17,6 @@ from raccoon_src.lib.dns_handler import DNSHandler
 from raccoon_src.lib.waf import WAF
 from raccoon_src.lib.tls import TLSHandler
 from raccoon_src.lib.web_app import WebApplicationScanner
-from raccoon_src.generate_html import generate  # Import the generate function
 
 # Set path for relative access to builtin files.
 MY_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -25,12 +24,13 @@ MY_PATH = os.path.abspath(os.path.dirname(__file__))
 
 def intro(logger):
     logger.info("""{}
-______       _ _  ______            
-| ___ \     | | | | ___ \           
-| |_/ / ___ | | |_| |_/ /   _ _ __  
-| ___ \/ _ \| | __|    / | | | '_ \ 
-| |_/ / (_) | | |_| |\ \ |_| | | | |
-\____/ \___/|_|\__\_| \_\__,_|_| |_|
+______       _ _  ______                                                         
+| ___ \     | | | | ___ \                                                        
+| |_/ / ___ | | |_| |_/ /   _ _ __                                               
+| ___ \/ _ \| | __|    / | | | '_ \                                              
+| |_/ / (_) | | |_| |\ \ |_| | | | |                                             
+\____/ \___/|_|\__\_| \_\__,_|_| |_|                                             
+                                        
 {}
 
 4841434b414c4c5448455448494e4753
@@ -79,6 +79,9 @@ https://github.com/prath-10/BoltRun
 @click.option("--no-url-fuzzing", is_flag=True, help="Do not fuzz URLs")
 @click.option("--no-sub-enum", is_flag=True, help="Do not bruteforce subdomains")
 @click.option("--skip-nmap-scan", is_flag=True, help="Do not perform an Nmap scan")
+# @click.option("-d", "--delay", default="0.25-1",
+#               help="Min and Max number of seconds of delay to be waited between requests\n"
+#                    "Defaults to Min: 0.25, Max: 1. Specified in the format of Min-Max")
 @click.option("-q", "--quiet", is_flag=True, help="Do not output to stdout")
 @click.option("-o", "--outdir", default="raccoon_scan_results",
               help="Directory destination for scan output")
@@ -104,8 +107,9 @@ def main(target,
          no_url_fuzzing,
          no_sub_enum,
          skip_nmap_scan,
-         quiet,
-         outdir):
+         # delay,
+         outdir,
+         quiet):
     try:
         # ------ Arg validation ------
         # Set logging level and Logger instance
@@ -133,6 +137,8 @@ def main(target,
                     COLORED_COMBOS.NOTIFY, proxy_list))
         elif proxy:
             logger.info("{} Routing traffic through proxy {}\n".format(COLORED_COMBOS.NOTIFY, proxy))
+
+        # TODO: Sanitize delay argument
 
         dns_records = tuple(dns_records.split(","))
         ignored_response_codes = tuple(int(code) for code in ignored_response_codes.split(","))
@@ -168,7 +174,7 @@ def main(target,
 
         main_loop = asyncio.get_event_loop()
 
-        logger.info("{}### Raccoon Scan Started ###{}\n".format(COLOR.GRAY, COLOR.RESET))
+        logger.info("{}### BoltRun Scan Started ###{}\n".format(COLOR.GRAY, COLOR.RESET))
         logger.info("{} Trying to gather information about host: {}".format(COLORED_COMBOS.INFO, target))
 
         # TODO: Populate array when multiple targets are supported
@@ -248,10 +254,6 @@ def main(target,
                     time.sleep(15)
 
         logger.info("\n{}### Raccoon scan finished ###{}\n".format(COLOR.GRAY, COLOR.RESET))
-
-        # Generate HTML report
-        generate(host, outdir)
-
         os.system("stty sane")
 
     except KeyboardInterrupt:

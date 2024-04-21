@@ -96,12 +96,14 @@ class RequestHandler(metaclass=Singleton):
             raise RequestHandlerException("Connection with server timed out")
         except NewConnectionError:
             raise RequestHandlerException("Address cannot be resolved")
+            # New connection error == Can't resolve address
         except ConnectionError:
+            # TODO: Increase delay
             raise RequestHandlerException("Error connecting to host")
         except TooManyRedirects:
             raise RequestHandlerException("Infinite redirects detected - too many redirects error")
         except UnicodeDecodeError:
-            # Following issue #19, apparently some sites do not use utf-8 in their uris
+            # Following issue #19, apparently some sites do not use utf-8 in their uris :<>
             pass
 
     def get_new_session(self):

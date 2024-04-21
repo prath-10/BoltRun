@@ -1,28 +1,40 @@
-from raccoon_src.generate_html import generate
+
 
 class XSS:
+
     def __init__(self):
         pass
+
 
 class LFI:
+
     def __init__(self):
         pass
+
 
 class RFI:
+
     def __init__(self):
         pass
+
 
 class Traversal:
+
     def __init__(self):
         pass
+
 
 class RCE:
+
     def __init__(self):
         pass
 
+
 class OWASPScanner:
+
     def __init__(self):
         self.running_threads = []
+
         # params
         pass
 
@@ -40,6 +52,4 @@ class OWASPScanner:
 
     def run(self):
         # Perform all checks, create relevant threads
-        
-        # Call the generate function after performing checks
-        generate([])  # Pass any relevant information to generate the HTML output
+        pass

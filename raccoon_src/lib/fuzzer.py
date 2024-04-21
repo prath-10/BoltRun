@@ -8,8 +8,10 @@ from raccoon_src.utils.request_handler import RequestHandler
 from raccoon_src.utils.help_utils import HelpUtilities
 from raccoon_src.utils.logger import Logger
 
-# Import the generate function
-from raccoon_src.generate_html import generate
+
+# Really wanted to use Aiohttp, doesn't play nice with proxies or TOR, disconnects unexpectedly, etc.
+# Going threaded on this one
+
 
 class URLFuzzer:
 
@@ -149,6 +151,3 @@ class URLFuzzer:
             if "Remote end closed connection without response" in str(e):
                 self.logger.info("{} {}. Target is actively closing connections - will not "
                                  "bruteforce URLs".format(COLORED_COMBOS.BAD, str(e)))
-
-        # Call the generate function after completing the fuzzing tasks
-        generate([self.logger.get_logs()])

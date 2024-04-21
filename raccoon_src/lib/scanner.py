@@ -3,7 +3,6 @@ from subprocess import PIPE, Popen
 from raccoon_src.utils.help_utils import HelpUtilities
 from raccoon_src.utils.logger import Logger
 from raccoon_src.utils.coloring import COLOR, COLORED_COMBOS
-from raccoon_src.generate_html import generate  # Import the HTML generation function
 
 
 class NmapScan:
@@ -87,9 +86,6 @@ class Scanner:
             parsed_result = cls._parse_scan_output(result)
             scan.logger.info(parsed_result)
         Scanner.write_up(scan, result, err)
-        
-        # Call the generate function after the scan
-        generate([])  # Pass any relevant information to generate the HTML output
 
     @classmethod
     def _parse_scan_output(cls, result):

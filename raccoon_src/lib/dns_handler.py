@@ -6,9 +6,8 @@ from raccoon_src.utils.exceptions import RaccoonException
 from raccoon_src.utils.logger import Logger
 from raccoon_src.utils.coloring import COLOR, COLORED_COMBOS
 
-# Import the generate function
-from raccoon_src.generate_html import generate
 
+# noinspection PyUnboundLocalVariable
 class DNSHandler:
     """Handles DNS queries and lookups"""
 
@@ -57,9 +56,6 @@ class DNSHandler:
                     if ":" in line:
                         logger.debug(line)
 
-        # Call the generate function after completing the DNS-related tasks
-        generate([result.decode().strip().split("\n")])
-
     @classmethod
     async def generate_dns_dumpster_mapping(cls, host, sout_logger):
         sout_logger.info("{} Trying to fetch DNS Mapping for {} from DNS dumpster".format(
@@ -78,6 +74,3 @@ class DNSHandler:
         except RaccoonException:
             sout_logger.info("{} Failed to generate DNS mapping. A connection error occurred.".format(
                 COLORED_COMBOS.BAD))
-
-        # Call the generate function after completing the DNS-related tasks
-        generate([path])

@@ -167,4 +167,62 @@ class WebApplicationScanner:
     def _find_forms(self, soup):
         # TODO: Analyze interesting input names/ids/params
         self.forms = soup.select("form")
-        if self.forms
+        if self.forms:
+            self.logger.info("{} {} HTML forms discovered".format(COLORED_COMBOS.NOTIFY, len(self.forms)))
+            for form in self.forms:
+                form_action = form.get("action")
+                if form_action == "#":
+                    continue
+                form_id = form.get("id")
+                form_class = form.get("class")
+                form_method = form.get("method")
+                self.logger.debug("\tForm details: ID: {}, Class: {}, Method: {}, action: {}".format(
+                    form_id, form_class, form_method, form_action
+                ))
+
+    def _add_to_emails(self, href):
+        self.emails.add(href)
+
+    async def get_web_application_info(self):
+        session = self.request_handler.get_new_session()
+        try:
+            with session:
+                # Test if target is serving HTTP requests
+                response = session.get(
+                    timeout=20,
+                    url="{}://{}:{}".format(
+                        self.host.protocol,
+                        self.host.target,
+                        self.host.port
+                    )
+                )
+                self.headers = response.headers
+                self._detect_cms()
+                self._robots()
+                self._sitemap()
+                self._server_info()
+                self._x_powered_by()
+                self._cors_wildcard()
+                self._xss_protection()
+                self._anti_clickjacking()
+                self._cookie_info(session.cookies)
+
+                soup = BeautifulSoup(response.text, "lxml")
+                self._find_urls(soup)
+                self._find_forms(soup)
+                self.storage_explorer.run(soup)
+
+        except (ConnectionError, TooManyRedirects) as e:
+            raise WebAppScannerException("Couldn't get response from server.\n"
+                                         "Caused due to exception: {}".format(str(e)))
+
+    async def run_scan(self):
+        self.logger.info("{} Trying to collect {} web application data".format(COLORED_COMBOS.INFO, self.host))
+        try:
+            self.web_server_validator.validate_target_webserver(self.host)
+            await self.get_web_application_info()
+        except WebServerValidatorException:
+            self.logger.info(
+                "{} Target does not seem to have an active web server on port: {}. "
+                "No web application data will be gathered.".format(COLORED_COMBOS.NOTIFY, self.host.port))
+            return

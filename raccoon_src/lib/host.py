@@ -7,8 +7,6 @@ from raccoon_src.utils.help_utils import HelpUtilities
 from raccoon_src.utils.coloring import COLOR, COLORED_COMBOS
 from raccoon_src.utils.logger import Logger, SystemOutLogger
 
-# Import the generate function
-from raccoon_src.generate_html import generate
 
 class Host:
     """
@@ -137,6 +135,3 @@ class Host:
                 self.naked = ".".join(self.fqdn.split('.')[1:])
         self.create_host_dir_and_set_file_logger()
         self.write_up()
-
-        # Call the generate function after writing the DNS query results
-        generate([self.logger.get_logs()])
